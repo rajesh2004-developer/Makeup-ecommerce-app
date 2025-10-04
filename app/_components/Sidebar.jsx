@@ -6,25 +6,30 @@ import {
   SidebarGroup,
   SidebarHeader,
 } from '@/components/ui/sidebar';
-import { ArrowBigRight, ArrowRight, Moon, Sun } from 'lucide-react';
+import { SignInButton, UserButton, useUser } from '@clerk/nextjs';
+import { ArrowRight, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export function AppSidebar() {
   const { resolvedTheme, setTheme } = useTheme();
+  const { user } = useUser();
   return (
     <Sidebar>
       <SidebarHeader>
         <div className="flex items-center justify-between p-4">
-          <Image
-            src={
-              resolvedTheme === 'light' ? '/light_logo.svg' : '/dark_logo.svg'
-            }
-            width={40}
-            height={40}
-            className="w-[150px] object-contain"
-            alt="Logo"
-          />
+          <Link href={'/'}>
+            <Image
+              src={
+                resolvedTheme === 'light' ? '/light_logo.svg' : '/dark_logo.svg'
+              }
+              width={40}
+              height={40}
+              className="w-[150px] object-contain cursor-pointer"
+              alt="Logo"
+            />
+          </Link>
           <Button
             onClick={() =>
               setTheme(resolvedTheme === 'light' ? 'dark' : 'light')
@@ -157,9 +162,46 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter className={'px-5'}>
-        <Button className="w-full mb-15 p-1 text-lg cursor-pointer mt-5">
-          SignIn / SignUp
-        </Button>
+        {!user ? (
+          <SignInButton className="w-full mb-15 p-1 text-lg cursor-pointer mt-5 border rounded-md dark:text-black dark:bg-gray-200 text-white bg-black">
+            SignIn / SignUp
+          </SignInButton>
+        ) : (
+          <div className="mb-15 mt-5 w-full">
+            <div
+              className="w-full p-3 border rounded-md dark:bg-gray-800 bg-gray-50 flex items-center justify-between cursor-pointer"
+              onClick={(e) => {
+                const userButton = e.currentTarget.querySelector('button');
+                if (userButton) userButton.click();
+              }}
+            >
+              <div className="flex items-center gap-3">
+                <UserButton />
+                <div className="flex flex-col">
+                  <span className="text-sm font-semibold dark:text-white text-black">
+                    Welcome back!
+                  </span>
+                  <span className="text-xs dark:text-gray-400 text-gray-600">
+                    Manage your account
+                  </span>
+                </div>
+              </div>
+              <svg
+                className="w-5 h-5 dark:text-gray-400 text-gray-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </div>
+          </div>
+        )}
       </SidebarFooter>
     </Sidebar>
   );
