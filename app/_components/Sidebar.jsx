@@ -6,15 +6,52 @@ import {
   SidebarGroup,
   SidebarHeader,
 } from '@/components/ui/sidebar';
+import { ProductContext } from '@/context/ProductContext';
 import { SignInButton, UserButton, useUser } from '@clerk/nextjs';
 import { ArrowRight, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useContext } from 'react';
 
 export function AppSidebar() {
   const { resolvedTheme, setTheme } = useTheme();
   const { user } = useUser();
+  const { products, setProductByFilter, type, setType } =
+    useContext(ProductContext);
+
+  const fetchProductsByType = async (type) => {
+    try {
+      setType(type);
+      console.log(type);
+      const filterByType = products.filter(
+        (product) => product.product_type == type
+      );
+      setProductByFilter(filterByType);
+      console.log(filterByType);
+      document.getElementById('products')?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const filterProductsByTag = async (tag) => {
+    try {
+      const filtered = products
+        .filter((product) => product.product_type == type)
+        .filter((product) => product.tag_list.includes(tag));
+      setProductByFilter(filtered);
+      console.log(filtered);
+      document.getElementById('products')?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <Sidebar>
       <SidebarHeader>
@@ -48,34 +85,64 @@ export function AppSidebar() {
               <ArrowRight className="inline pl-1 hover:translate-x-1" />
             </h2>
             <ul className="px-2 py-1 text-[18px] cursor-pointer flex flex-col gap-1">
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => fetchProductsByType('blush')}
+              >
                 Blush
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => fetchProductsByType('bronzer')}
+              >
                 Bronzer
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => fetchProductsByType('eyebrow')}
+              >
                 Eyebrow
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => fetchProductsByType('eyeliner')}
+              >
                 Eyeliner
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => fetchProductsByType('eyeshadow')}
+              >
                 Eyeshadow
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => fetchProductsByType('foundation')}
+              >
                 Foundation
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => fetchProductsByType('lip_liner')}
+              >
                 Lip liner
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => fetchProductsByType('lipstick')}
+              >
                 Lipstick
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => fetchProductsByType('mascara')}
+              >
                 Mascara
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => fetchProductsByType('nail_polish')}
+              >
                 Nail polish
               </li>
             </ul>
@@ -88,73 +155,142 @@ export function AppSidebar() {
               <ArrowRight className="inline pl-1 hover:translate-x-1" />
             </h2>
             <ul className="px-2 py-1 text-[18px] cursor-pointer flex flex-col gap-1">
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black ">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black "
+                onClick={() => filterProductsByTag('Canadian')}
+              >
                 Canadian
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => filterProductsByTag('CertClean')}
+              >
                 CertClean
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => filterProductsByTag('Chemical Free')}
+              >
                 Chemical Free
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => filterProductsByTag('Dairy Free')}
+              >
                 Dairy Free
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => filterProductsByTag('EWG Verified')}
+              >
                 EWG Verified
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => filterProductsByTag('EcoCert')}
+              >
                 EcoCert
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => filterProductsByTag('Fair Trade')}
+              >
                 Fair Trade
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => filterProductsByTag('Gluten Free')}
+              >
                 Gluten Free
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => filterProductsByTag('Hypoallergenic')}
+              >
                 Hypoallergenic
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => filterProductsByTag('Natural')}
+              >
                 Natural
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => filterProductsByTag('No Talc')}
+              >
                 No Talc
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => filterProductsByTag('Non-GMO')}
+              >
                 Non-GMO
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => filterProductsByTag('Organic')}
+              >
                 Organic
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => filterProductsByTag('Peanut Free Product')}
+              >
                 Peanut Free Product
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => filterProductsByTag('Sugar Free')}
+              >
                 Sugar Free
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => filterProductsByTag('USDA Organic')}
+              >
                 USDA Organic
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => filterProductsByTag('Vegan')}
+              >
                 Vegan
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => filterProductsByTag('alcohol free')}
+              >
                 alcohol free
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => filterProductsByTag('cruelty free')}
+              >
                 cruelty free
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => filterProductsByTag('oil free')}
+              >
                 oil free
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => filterProductsByTag('purpicks')}
+              >
                 purpicks
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => filterProductsByTag('silicone free')}
+              >
                 silicone free
               </li>
-              <li className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black">
+              <li
+                className="w-full hover:bg-gray-200 p-1 rounded hover:dark:text-black"
+                onClick={() => filterProductsByTag('water free')}
+              >
                 water free
               </li>
             </ul>
