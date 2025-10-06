@@ -7,13 +7,75 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { BookOpen, ExternalLink, Tag } from 'lucide-react';
+import { BookOpen, ExternalLink, Star, Tag } from 'lucide-react';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { db } from '@/Config/fireBase';
+import { useUser } from '@clerk/nextjs';
+import { CartProductsContext } from '@/context/CartProductsContext';
 
 const Products = () => {
   const [counters, setCounters] = useState({});
   const [loading, setLoading] = useState(true);
   const { setProducts, productByFilter, setProductByFilter } =
     useContext(ProductContext);
+  const { user } = useUser();
+  const { cartProducts, setCartProducts, cartId } =
+    useContext(CartProductsContext);
+
+  const updateCartProducts = async (product, quantity) => {
+    console.log('working');
+
+    try {
+      if (!cartId) {
+        return;
+      }
+      // console.log(userSnap.data().cartId);
+      const cartRef = doc(db, 'cart', cartId);
+      const cartSnap = await getDoc(cartRef);
+      let cartData = {
+        name: product.name,
+        image: product.image_link
+          ? product.image_link
+          : product.api_featured_image,
+        price: product.price || '1.0',
+        quantity: quantity,
+        id: product.id,
+        brand: product.brand || 'Brand',
+        addedAt: new Date(),
+        description:
+          product.description ||
+          'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ratione quasi voluptas est modi ipsam dolor ex eligendi repellat minus architecto.',
+      };
+      if (cartSnap.exists()) {
+        let cartDbData = cartSnap.data();
+        let existingProducts = cartDbData?.products || [];
+        const productIndex = existingProducts.findIndex(
+          (item) => item.id === product.id
+        );
+        console.log(existingProducts);
+
+        if (productIndex !== -1) {
+          existingProducts[productIndex].quantity += quantity;
+        } else {
+          existingProducts.push(cartData);
+        }
+        setCartProducts(existingProducts);
+        await updateDoc(cartRef, {
+          products: existingProducts,
+          updatedAt: new Date(),
+        });
+      } else {
+        setCartProducts([cartData]);
+        await setDoc(cartRef, {
+          products: [cartData],
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -112,7 +174,14 @@ const Products = () => {
                     </p>
                   </div>
                   <div className="flex gap-3 items-center justify-between">
-                    <Button className={'cursor-pointer'}>Add to Cart</Button>
+                    <Button
+                      className={'cursor-pointer'}
+                      onClick={() =>
+                        updateCartProducts(product, counters[index] || 1)
+                      }
+                    >
+                      Add to Cart
+                    </Button>
                     <div className="flex gap-2 items-center">
                       <Button
                         className={'cursor-pointer'}

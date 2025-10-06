@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Carousel,
@@ -8,9 +8,30 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
+import { ProductContext } from '@/context/ProductContext';
 
 const TopCategory = () => {
   const [topCategory, setTopCategory] = useState([]);
+  const {products, setProductByFilter, type, setType } =
+    useContext(ProductContext);
+
+  const fetchProductsByType = async (type) => {
+    try {
+      setType(type);
+      console.log(type);
+      const filterByType = products.filter(
+        (product) => product.product_type == type
+      );
+      setProductByFilter(filterByType);
+      console.log(filterByType);
+      document.getElementById('products')?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     const fetchTopCategoryData = async () => {
@@ -80,6 +101,7 @@ const TopCategory = () => {
               <CarouselItem
                 key={index}
                 className="pl-4 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
+                onClick={() => fetchProductsByType(category.product_type)}
               >
                 <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group overflow-hidden">
                   <CardContent className="p-0">
