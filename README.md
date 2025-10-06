@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Makeup E-commerce App
 
-## Getting Started
+A simple e-commerce app for browsing and “purchasing” makeup items, built using the [Makeup API](https://makeup-api.herokuapp.com/) as the data source.
 
-First, run the development server:
+## Table of Contents
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- [Demo](#demo)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Setup & Installation](#setup--installation)
+- [Usage](#usage)
+- [Project Structure](#project-structure)
+- [Environment Variables](#environment-variables)
+- [Contributing](#contributing)
+- [License](#license)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Demo
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+Check out the live version here:
+[makeup-ecommerce-app.vercel.app](https://makeup-ecommerce-app.vercel.app/)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+> ⚠️ Currently the deployment shows an “Internal Error”. Make sure your environment and backend APIs are working properly.
 
-## Learn More
+![Screenshot](./path/to/screenshot.png)
 
-To learn more about Next.js, take a look at the following resources:
+## Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Browse makeup products (lipstick, eyeliner, etc.)
+- Filter by brand, product type, price, etc.
+- View product details (images, descriptions)
+- Add to cart / remove from cart (local state)
+- Simple checkout flow (mock)
+- Responsive UI for mobile and desktop
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Tech Stack
 
-## Deploy on Vercel
+- Frontend: React (or Next.js / your chosen framework)
+- State management: React Context / Redux / etc.
+- Styling: CSS / SCSS / Tailwind CSS / styled-components
+- API: [Makeup API](https://makeup-api.herokuapp.com/)
+- Deployment: Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Setup & Installation
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. **Clone the repo**
+   ```bash
+   git clone https://github.com/yourusername/makeup-ecommerce-app.git
+   cd makeup-ecommerce-app
