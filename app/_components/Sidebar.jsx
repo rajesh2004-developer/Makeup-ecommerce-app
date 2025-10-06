@@ -16,9 +16,9 @@ import { useContext } from 'react';
 
 export function AppSidebar() {
   const { resolvedTheme, setTheme } = useTheme();
-  const { user } = useUser();
   const { products, setProductByFilter, type, setType } =
     useContext(ProductContext);
+  const { user } = useUser();
 
   const fetchProductsByType = async (type) => {
     try {

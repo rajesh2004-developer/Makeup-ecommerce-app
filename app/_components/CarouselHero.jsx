@@ -79,9 +79,9 @@ export function CarouselHero() {
                       </div>
 
                       <div className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-2 md:pt-4">
-                        <button className="px-6 py-3 md:px-8 md:py-4 bg-white text-black font-semibold rounded-full hover:bg-gray-100 transition-all transform hover:scale-105 text-sm md:text-base">
+                        {/* <button className="px-6 py-3 md:px-8 md:py-4 bg-white text-black font-semibold rounded-full hover:bg-gray-100 transition-all transform hover:scale-105 text-sm md:text-base">
                           Shop Now
-                        </button>
+                        </button> */}
                         <button className="px-6 py-3 md:px-8 md:py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-full border-2 border-white hover:bg-white/20 transition-all text-sm md:text-base">
                           Learn More
                         </button>
