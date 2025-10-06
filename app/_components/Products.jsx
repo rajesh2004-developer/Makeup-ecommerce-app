@@ -7,7 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { BookOpen, ExternalLink, Tag } from 'lucide-react';
+import { BookOpen, ExternalLink, Star, Tag } from 'lucide-react';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from '@/Config/fireBase';
 import { useUser } from '@clerk/nextjs';

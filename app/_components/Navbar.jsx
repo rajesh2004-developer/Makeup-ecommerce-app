@@ -3,11 +3,11 @@ import { Button } from '@/components/ui/button';
 import { CartProductsContext } from '@/context/CartProductsContext';
 import { ProductContext } from '@/context/ProductContext';
 import { SignInButton, UserButton, useUser } from '@clerk/nextjs';
-import { Moon, Search, Sun } from 'lucide-react';
+import { LogIn, Moon, Search, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import { X, ShoppingCart, Plus, Minus, Trash2 } from 'lucide-react';
 import {
@@ -28,7 +28,12 @@ const Navbar = () => {
   const { resolvedTheme, setTheme } = useTheme();
   const { user } = useUser();
   const [inputValue, setInputValue] = useState('');
-  const [isCartOpen, setIsCartOpen] = useState(true);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const { products, setProductByFilter, setType } = useContext(ProductContext);
   const { cartProducts, setCartProducts, cartId } =
@@ -76,6 +81,10 @@ const Navbar = () => {
       );
       setProductByFilter(filterByType);
       console.log(filterByType);
+      document.getElementById('products')?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
     } catch (error) {
       console.error(error);
     }
@@ -89,17 +98,22 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="w-full flex flex-wrap items-center justify-between gap-4 p-4 shadow-md dark:shadow-white/10 shadow-black/10 sticky top-0 z-1 bg-white dark:bg-black">
+      <nav
+        className="w-full flex flex-wrap items-center justify-between gap-4 p-4 shadow-md dark:shadow-white/10 shadow-black/10 sticky top-0 z-1 bg-white dark:bg-black"
+        id="navbar"
+      >
         <Link href={'/'} className="flex-shrink-0">
-          <Image
-            src={
-              resolvedTheme === 'light' ? '/light_logo.svg' : '/dark_logo.svg'
-            }
-            width={40}
-            height={40}
-            className="w-[150px] object-contain m-2 cursor-pointer"
-            alt="Logo"
-          />
+          {mounted && (
+            <Image
+              src={
+                resolvedTheme === 'light' ? '/light_logo.svg' : '/dark_logo.svg'
+              }
+              width={40}
+              height={40}
+              className="w-[150px] object-contain m-2 cursor-pointer"
+              alt="Logo"
+            />
+          )}
         </Link>
         <div className="flex items-center gap-2 border h-[40px] rounded-md w-full sm:w-[500px] md:flex-1 md:max-w-[600px] relative py-1 px-3 md:order-0 order-1">
           <input
@@ -130,18 +144,25 @@ const Navbar = () => {
           />
         </div>
         <div className="flex items-center justify-end gap-2 sm:gap-4 flex-shrink-0">
-          <Badge
-            className="flex items-center gap-2 rounded-lg px-3 py-2 text-base tabular-nums bg-black dark:bg-white text-white dark:text-black border-0 hover:scale-105 transition-transform cursor-pointer"
-            onClick={() => setIsCartOpen(true)}
-          >
-            <ShoppingCart className="w-7 h-7" />
-            <span className="hidden sm:inline">Cart</span>
-          </Badge>
+          {user && (
+            <Badge
+              className="flex items-center gap-2 rounded-lg px-3 py-2 text-base tabular-nums bg-black dark:bg-white text-white dark:text-black border-0 hover:scale-105 transition-transform cursor-pointer"
+              onClick={() => setIsCartOpen(true)}
+            >
+              <ShoppingCart className="w-7 h-7" />
+              <span className="hidden sm:inline">Cart</span>
+            </Badge>
+          )}
           {user ? (
             <UserButton />
           ) : (
-            <SignInButton className="w-full p-1 text-xl px-1 cursor-pointer border rounded-md dark:text-black dark:bg-gray-200 text-white bg-black">
-              SignIn
+            <SignInButton className="h-full p-1 text-xl  cursor-pointer border rounded-md dark:text-black dark:bg-gray-200 text-white bg-black hover:scale-105 transition-transform ">
+              <Button
+                className={'flex items-center gap-2 px-3 py-3 text-base '}
+              >
+                <LogIn className="w-7 h-7" />
+                <span className="hidden sm:inline">Sign In</span>
+              </Button>
             </SignInButton>
           )}
           <Button

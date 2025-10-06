@@ -29,7 +29,7 @@ export function CarouselHero() {
   }, []);
 
   return (
-    <div className="relative w-full min-h-screen overflow-hidden">
+    <div className="relative w-full min-h-screen overflow-hidden" id='carousel'>
       <Carousel
         plugins={[plugin.current]}
         className="w-full h-full"
